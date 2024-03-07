@@ -1,24 +1,19 @@
 import { useState } from 'react'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css'
+import { Main } from './pages/Main';
+import { Recipes } from './pages/Recipes';
+import { Ingredients } from './pages/Ingredients';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className='h-full flex flex-col justify-center gap-2'>
-      <div>
-        <p>Recipe Finder</p>
-      </div>
-      <div>
-        <p>
-          Search by
-        </p>
-      </div>
-      <div className='flex justify-center gap-10'>
-        <button className='btn-primary'>Recipes</button>
-        <button className='btn-primary'>Ingredients</button>
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Main />}/>
+        <Route path='/recipe' element={<Recipes />}/>
+        <Route path='/ingredients' element={<Ingredients />}/>
+      </Routes>
+    </BrowserRouter>
   )
 }
 
