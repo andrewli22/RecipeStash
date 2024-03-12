@@ -2,6 +2,7 @@ import { BackButton } from "../components/BackButton"
 import { useState } from "react"
 
 export const Recipes = () => {
+  const URL = "https://api.spoonacular.com/recipes/complexSearch";
   const [dish, setDish] = useState("");
   const handleEnter = (e) => {
     if (e.key === "Enter") {
@@ -11,7 +12,14 @@ export const Recipes = () => {
 
   const handleSearch = () => {
     console.log(dish);
+    fetchRecipes(dish);
     setDish("");
+  }
+
+  const fetchRecipes = async (dish) => {
+    const res = await fetch (URL);
+    const recipes = await res.json();
+    console.log(recipes);
   }
 
   return(
