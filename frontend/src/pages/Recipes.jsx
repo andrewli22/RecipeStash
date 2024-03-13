@@ -1,9 +1,12 @@
 import { BackButton } from "../components/BackButton"
 import { useState } from "react"
+import { KEY } from "../config";
+import { RecipeCard } from "../components/RecipeCard";
 
 export const Recipes = () => {
   const URL = "https://api.spoonacular.com/recipes/complexSearch";
   const [dish, setDish] = useState("");
+  const [results, setResults] = useState([]);
   const handleEnter = (e) => {
     if (e.key === "Enter") {
       handleSearch();
@@ -17,9 +20,16 @@ export const Recipes = () => {
   }
 
   const fetchRecipes = async (dish) => {
-    const res = await fetch (URL);
-    const recipes = await res.json();
-    console.log(recipes);
+    try {
+      const response = await fetch(`${URL}?apiKey=${KEY}&query=${dish}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setResults([...data.results]);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return(
@@ -48,6 +58,8 @@ export const Recipes = () => {
           </button>
         </div>
       </div>
+      <RecipeCard />      
+      <button onClick={() => (console.log(results))}>test</button>
     </div>
   )
 }
