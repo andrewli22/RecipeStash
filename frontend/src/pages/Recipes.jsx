@@ -33,11 +33,11 @@ export const Recipes = () => {
   }
 
   return(
-    <div className='h-full flex flex-col'>
+    <div className='h-full flex flex-col gap-3'>
       <div className='flex justify-end'>
         <BackButton />
       </div>
-      <div className='flex flex-col gap-5'>
+      <div className='flex flex-col gap-3'>
         <div>
           Search for recipe by dish
         </div>
@@ -58,8 +58,16 @@ export const Recipes = () => {
           </button>
         </div>
       </div>
-      <RecipeCard />      
-      <button onClick={() => (console.log(results))}>test</button>
+      <div className='flex flex-wrap h-screen gap-2 justify-center'>
+        {results &&
+          results.map((recipe, id) => {
+            return (
+              <RecipeCard key={id} title={recipe.title} img={recipe.image} />      
+            )
+          })
+        }
+      </div>
+      {/* <button onClick={() => console.log(results)}>test</button> */}
     </div>
   )
 }
