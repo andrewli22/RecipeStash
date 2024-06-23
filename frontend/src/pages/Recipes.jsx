@@ -62,12 +62,12 @@ export const Recipes = () => {
         {results &&
           results.map((recipe, id) => {
             return (
-              <RecipeCard key={id} title={recipe.title} img={recipe.image} />      
+              <RecipeCard key={id} title={recipe.title} img={recipe.image} recipeId={recipe.id} />      
             )
           })
         }
       </div>
-      {/* <button onClick={() => console.log(results)}>test</button> */}
+      <button onClick={() => console.log(results)}>test</button>
     </div>
   )
 }
