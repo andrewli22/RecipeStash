@@ -1,6 +1,6 @@
 import { BackButton } from "../components/BackButton"
 import { useState } from "react"
-import { KEY } from "../config";
+import { KEY } from "../config.js";
 import { RecipeCard } from "../components/RecipeCard";
 
 export const Recipes = () => {
@@ -14,7 +14,6 @@ export const Recipes = () => {
   }
 
   const handleSearch = () => {
-    console.log(dish);
     fetchRecipes(dish);
     setDish("");
   }
@@ -33,41 +32,48 @@ export const Recipes = () => {
   }
 
   return(
-    <div className='h-full flex flex-col gap-3'>
-      <div className='flex justify-end'>
+    // Container
+    <div className='h-full flex flex-col'>
+      {/* Back button */}
+      <div className='flex justify-end mx-5'>
         <BackButton />
       </div>
-      <div className='flex flex-col gap-3'>
+      {/* Search recipe */}
+      <div className='flex flex-col gap-5'>
+        {/* Header */}
         <div>
-          Search for recipe by dish
+          Search for Recipes
         </div>
-        <div className='flex flex-col justify-center items-center gap-5'>
+        <div>
           <input
-            type='text'
-            className='border border-solid w-2/3 p-2 rounded'
-            placeholder='Enter name of dish'
-            value={dish}
+            type="text"
+            className='border border-black rounded w-1/3 p-2'
             onChange={(e) => setDish(e.target.value)}
             onKeyDown={(e) => handleEnter(e)}
           />
+        </div>
+        {/* Button to search */}
+        <div>
           <button
-            className='border border-solid w-20 rounded p-1'
-            onClick={handleSearch}
+            className='border border-black rounded p-1'
+            onClick={() => handleSearch()}
           >
             Search
           </button>
         </div>
       </div>
-      <div className='flex flex-wrap h-screen gap-2 justify-center'>
-        {results &&
-          results.map((recipe, id) => {
-            return (
-              <RecipeCard key={id} title={recipe.title} img={recipe.image} recipeId={recipe.id} />      
-            )
-          })
-        }
+      {/* Load Recipes */}
+      <div className='mt-2 mx-20'>
+        <div className='flex flex-wrap gap-10'>
+          {results &&
+            results.map((res, id) => {
+              return (
+                <RecipeCard title={res.title} img={res.image} recipeId={res.id}/>
+              )
+            })
+          }
+        </div>
       </div>
-      <button onClick={() => console.log(results)}>test</button>
     </div>
   )
 }
