@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 
 export const Main = () => {
+  localStorage.clear();
   return (
     <div className='h-full flex flex-col justify-center gap-2'>
       <div>

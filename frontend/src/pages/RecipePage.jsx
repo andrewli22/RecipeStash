@@ -1,10 +1,10 @@
 import { useParams } from 'react-router';
 
 export const RecipePage = () => {
-  const recipeId = useParams().recipeId;
+  const { recipeId, title } = useParams();
   return (
     <div>
-      Recipe Page {recipeId}
+      {title}
     </div>
   )
 }

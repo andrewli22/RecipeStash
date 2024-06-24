@@ -1,5 +1,5 @@
 import { BackButton } from "../components/BackButton"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { KEY } from "../config.js";
 import { RecipeCard } from "../components/RecipeCard";
 
@@ -7,6 +7,17 @@ export const Recipes = () => {
   const URL = "https://api.spoonacular.com/recipes/complexSearch";
   const [dish, setDish] = useState("");
   const [results, setResults] = useState([]);
+
+  useEffect(() => {
+    try {
+      const getLastSearch = localStorage.getItem("lastSearch");
+      const getLastSearchArr = JSON.parse(getLastSearch);
+      setResults([...getLastSearchArr]);
+    } catch (e) {
+      console.log(e.message);
+    }
+  }, [])
+
   const handleEnter = (e) => {
     if (e.key === "Enter") {
       handleSearch();
@@ -26,6 +37,7 @@ export const Recipes = () => {
       }
       const data = await response.json();
       setResults([...data.results]);
+      localStorage.setItem("lastSearch", JSON.stringify(data.results));
     } catch (error) {
       console.error(error);
     }
@@ -68,7 +80,7 @@ export const Recipes = () => {
           {results &&
             results.map((res, id) => {
               return (
-                <RecipeCard title={res.title} img={res.image} recipeId={res.id}/>
+                <RecipeCard key={id} title={res.title} img={res.image} recipeId={res.id}/>
               )
             })
           }
