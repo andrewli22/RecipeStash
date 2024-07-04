@@ -1,34 +1,28 @@
 import { BackButton } from '../components/BackButton'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { KEY } from '../config.js';
 import { RecipeCard } from '../components/RecipeCard';
+import { DeleteButton } from '../components/DeleteButton.jsx';
+import { PlusButton } from '../components/PlusButton.jsx';
+import { EditButton } from '../components/EditButton.jsx';
 
 export const Ingredients = () => {
-  const URL = 'https://api.spoonacular.com/recipes/complexSearch';
+  const URL = 'https://api.spoonacular.com/recipes/findByIngredients';
   const [results, setResults] = useState([]);
-  const [ingredients, setIngredients] = useState({});
+  const [ingredientList, setIngredientList] = useState({});
+  const [ingredient, setIngredient] = useState('');
   const [measurement, setMeasurement] = useState('Units');
   const [quantity, setQuantity] = useState('');
-  const handleEnter = (e) => {
-    if (e.key === 'Enter') {
-      handleIngredientList(e.target.value);
-      e.currentTarget.value = '';
-    }
-  }
+  const [edit, setEdit] = useState(false);
 
-  const handleIngredientList = (ingredient) => {
-    console.log(ingredient);
-    console.log(measurement);
-    setIngredients({...ingredients, [ingredient]: measurement});
-  }
+  const ingredientRef = useRef(null);
+  const quantityRef = useRef(null);
 
-  const handleQuantity = (e) => {
-    const quantity = e.target.value + ' ' + measurement;
-    console.log(quantity);
-  }
-
-  const handleSearch = () => {
-
+  const handleAddIngredient = () => {
+    const quant = quantity + ' ' + measurement;
+    setIngredientList({...ingredientList, [ingredient]: quant});
+    setIngredient('');
+    setQuantity('');
   }
 
   const fetchRecipes = async (dish) => {
@@ -43,6 +37,18 @@ export const Ingredients = () => {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  const handleEdit = () => {
+    setEdit(!edit);
+    // if (edit) {
+    //   ingredientRef.current.focus();
+    //   quantityRef.current.focus();
+    // }
+  }
+
+  const handleDelete = () => {
+
   }
 
   return(
@@ -67,9 +73,10 @@ export const Ingredients = () => {
               <input
                 type='text'
                 className='border rounded w-full p-2'
-                onKeyDown={(e) => handleEnter(e)}
+                onChange={(e) => setIngredient(e.target.value)}
+                value={ingredient}
                 placeholder='Enter Ingredients'
-              />
+                />
             </div>
             <div className='w-1/5'>
               <div className='flex mb-2'>
@@ -80,6 +87,7 @@ export const Ingredients = () => {
                   type='text'
                   className='border-y border-l rounded-l w-full p-2 z-20'
                   onChange={(e) => setQuantity(e.target.value)}
+                  value={quantity}
                 />
                 <select
                   className='border-y border-r rounded-r p-2 bg-white'
@@ -95,55 +103,46 @@ export const Ingredients = () => {
               </div>
             </div>
             <div className='flex items-center'>
-              <button
-                title='Add New'
-                className='group cursor-pointer outline-none mt-8'
-                onClick={() => console.log(quantity + ' ' + measurement)}
-              >
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  width='40px'
-                  height='40px'
-                  viewBox='0 0 24 24'
-                  className='stroke-black fill-none group-hover:fill-slate-300 group-active:duration-0 duration-300'
-                >
-                  <path
-                    d='M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z'
-                    strokeWidth='1'
-                  ></path>
-                  <path d='M8 12H16' strokeWidth='1'></path>
-                  <path d='M12 16V8' strokeWidth='1'></path>
-                </svg>
-              </button>
+              <PlusButton handleAddIngredient={handleAddIngredient} />
             </div>
           </div>
           <div className='flex justify-center items-center h-full w-14'>
-            <button className='h-full w-full border border-black rounded' onClick={() => console.log(ingredients)}>Search</button>
+            <button className='h-full w-full border border-black rounded' onClick={() => console.log(ingredientList)}>Search</button>
           </div>
         </div>
       </div>
       {/* Load Ingredients */}
-      {/* <div className='w-24'>
-        <button
-          className='inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md w-full h-full'
-        >
-          <svg
-            stroke='currentColor'
-            viewBox='0 0 24 24'
-            fill='none'
-            className='h-5 w-5 mr-2'
-            xmlns='http://www.w3.org/2000/svg'
-          >
-            <path
-              d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'
-              strokeWidth='2'
-              strokeLinejoin='round'
-              strokeLinecap='round'
-            />
-          </svg>
-          Delete
-        </button>
-      </div> */}
+      <div className='flex flex-col gap-2 items-center'>
+        {Object.keys(ingredientList).map((objKey, index) => {
+          return (
+            <div className='flex w-1/3 gap-5' key={index}>
+              <div
+                className='flex w-full items-center justify-center p-1 border rounded-lg h-9'
+              >
+                <input
+                  type='text'
+                  className='w-full h-full text-sm font-semibold p-2 mr-2'
+                  value={objKey}
+                  disabled={!edit}
+                  ref={ingredientRef}
+                />
+                <input
+                  type='text'
+                  className='w-full h-full text-sm font-semibold p-2'
+                  value={ingredientList[objKey]}
+                  disabled={!edit}
+                  ref={quantityRef}
+                />
+              </div>
+              <div className='flex gap-2'>
+                <DeleteButton handleDelete={handleDelete}/>
+                <EditButton handleEdit={handleEdit} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      
       {/* Load Recipes */}
       <div className='mt-2 mx-20'>
         <div className='flex flex-wrap gap-10'>
