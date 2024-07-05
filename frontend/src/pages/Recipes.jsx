@@ -1,5 +1,5 @@
 import { BackButton } from "../components/BackButton"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { KEY } from "../config.js";
 import { RecipeCard } from "../components/RecipeCard";
 
@@ -31,7 +31,7 @@ export const Recipes = () => {
 
   const fetchRecipes = async (dish) => {
     try {
-      const response = await fetch(`${URL}?apiKey=${KEY}&query=${dish}`);
+      const response = await fetch(`${URL}?query=${dish}&apiKey=${KEY}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -82,8 +82,7 @@ export const Recipes = () => {
               return (
                 <RecipeCard key={id} title={res.title} img={res.image} recipeId={res.id}/>
               )
-            })
-          }
+            })}
         </div>
       </div>
     </div>

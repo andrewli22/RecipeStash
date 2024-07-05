@@ -5,6 +5,7 @@ import { RecipeCard } from '../components/RecipeCard';
 import { DeleteButton } from '../components/DeleteButton.jsx';
 import { PlusButton } from '../components/PlusButton.jsx';
 import { EditButton } from '../components/EditButton.jsx';
+import { ConfirmButton } from '../components/ConfirmButton.jsx';
 
 export const Ingredients = () => {
   const URL = 'https://api.spoonacular.com/recipes/findByIngredients';
@@ -47,8 +48,9 @@ export const Ingredients = () => {
     // }
   }
 
-  const handleDelete = () => {
-
+  const handleDelete = (key) => {
+    delete ingredientList[key];
+    setIngredientList({ ...ingredientList });
   }
 
   return(
@@ -135,14 +137,17 @@ export const Ingredients = () => {
                 />
               </div>
               <div className='flex gap-2'>
-                <DeleteButton handleDelete={handleDelete}/>
-                <EditButton handleEdit={handleEdit} />
+                <DeleteButton handleDelete={() => handleDelete(objKey)}/>
+                {edit ? 
+                  <ConfirmButton handleEdit={handleEdit}/>
+                  :
+                  <EditButton handleEdit={handleEdit} />
+                }
               </div>
             </div>
           );
         })}
       </div>
-      
       {/* Load Recipes */}
       <div className='mt-2 mx-20'>
         <div className='flex flex-wrap gap-10'>

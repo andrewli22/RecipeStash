@@ -1,15 +1,15 @@
 export const DeleteButton = ({ handleDelete }) => {
   return (
-    <div className='w-24'>
+    <div className=''>
       <button
-        className='inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md w-full h-full'
-        onClick={() => handleDelete()}
+        className='inline-flex items-center p-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md w-full h-full'
+        onClick={handleDelete}
       >
         <svg
           stroke='currentColor'
           viewBox='0 0 24 24'
           fill='none'
-          className='h-5 w-5 mr-2'
+          className='h-5 w-5'
           xmlns='http://www.w3.org/2000/svg'
         >
           <path
@@ -19,7 +19,6 @@ export const DeleteButton = ({ handleDelete }) => {
             strokeLinecap='round'
           />
         </svg>
-        Delete
       </button>
     </div>
   );
