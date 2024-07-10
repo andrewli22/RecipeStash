@@ -1,4 +1,4 @@
-export const EditButton = ({ handleEdit }) => {
+export const EditButton = ({ handleEdit}) => {
   return (
     <div className='flex items-center justify-center'>
       <button

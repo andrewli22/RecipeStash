@@ -1,5 +1,5 @@
 import { BackButton } from '../components/BackButton'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { KEY } from '../config.js';
 import { RecipeCard } from '../components/RecipeCard';
 import { DeleteButton } from '../components/DeleteButton.jsx';
@@ -14,10 +14,10 @@ export const Ingredients = () => {
   const [ingredient, setIngredient] = useState('');
   const [measurement, setMeasurement] = useState('Units');
   const [quantity, setQuantity] = useState('');
-  const [edit, setEdit] = useState(false);
-
-  const ingredientRef = useRef(null);
-  const quantityRef = useRef(null);
+  const [editIngredient, setEditIngredient] = useState('');
+  const [editQuantity, setEditQuantity] = useState('');
+  const [editMeasurement, setEditMeasurement] = useState('Units');
+  const [editIdx, setEditIdx] = useState(null);
 
   const handleAddIngredient = () => {
     const quant = quantity + ' ' + measurement;
@@ -26,26 +26,35 @@ export const Ingredients = () => {
     setQuantity('');
   }
 
-  const fetchRecipes = async (dish) => {
+  const fetchRecipes = async (userIngredients) => {
     try {
-      const response = await fetch(`${URL}?apiKey=${KEY}&query=${dish}`);
+      const response = await fetch(`${URL}?apiKey=${KEY}&ingredients=${userIngredients}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      setResults([...data.results]);
-      localStorage.setItem('lastSearch', JSON.stringify(data.results));
+      setResults([...data]);
     } catch (error) {
       console.error(error);
     }
   }
 
-  const handleEdit = () => {
-    setEdit(!edit);
-    // if (edit) {
-    //   ingredientRef.current.focus();
-    //   quantityRef.current.focus();
-    // }
+  const handleEdit = (idx, oldKey, quantity) => {
+    setEditIngredient(oldKey);
+    const getNumeric = quantity.split(' ');
+    setEditQuantity(getNumeric[0]);
+    setEditIdx(idx);
+  }
+
+  const handleConfirmEdit = (oldKey) => {
+    if (editIdx !== null) {
+      const updatedIngredientList = { ...ingredientList };
+      delete updatedIngredientList[oldKey];
+      updatedIngredientList[editIngredient] = editQuantity + ' ' + editMeasurement;
+      setIngredientList(updatedIngredientList);
+    }
+    setEditIdx(null);
+    setEditIngredient('');
   }
 
   const handleDelete = (key) => {
@@ -53,8 +62,19 @@ export const Ingredients = () => {
     setIngredientList({ ...ingredientList });
   }
 
+  useEffect(() => {
+    if (editIdx !== null) {
+      document.getElementById(`ingredient-input-${editIdx}`).focus();
+    }
+  }, [editIdx]);
+
+  const handleSearch = () => {
+    const ingredients = Object.keys(ingredientList);
+    const ingredientString = ingredients.join(',+');
+    fetchRecipes(ingredientString);
+  }
+
   return(
-    // Container
     <div className='h-full flex flex-col'>
       {/* Back button */}
       <div className='flex justify-end mx-5'>
@@ -74,7 +94,7 @@ export const Ingredients = () => {
               </div>
               <input
                 type='text'
-                className='border rounded w-full p-2'
+                className='border rounded w-full p-2 h-10'
                 onChange={(e) => setIngredient(e.target.value)}
                 value={ingredient}
                 placeholder='Enter Ingredients'
@@ -87,12 +107,12 @@ export const Ingredients = () => {
               <div className='flex items-center'>
                 <input
                   type='text'
-                  className='border-y border-l rounded-l w-full p-2 z-20'
+                  className='border-y border-l rounded-l w-full p-2 z-20 h-10'
                   onChange={(e) => setQuantity(e.target.value)}
                   value={quantity}
                 />
                 <select
-                  className='border-y border-r rounded-r p-2 bg-white'
+                  className='border-y border-r rounded-r bg-white p-2 h-10'
                   value={measurement}
                   onChange={(e) => setMeasurement(e.target.value)}
                 >
@@ -109,7 +129,7 @@ export const Ingredients = () => {
             </div>
           </div>
           <div className='flex justify-center items-center h-full w-14'>
-            <button className='h-full w-full border border-black rounded' onClick={() => console.log(ingredientList)}>Search</button>
+            <button className='h-full w-full border border-black rounded' onClick={handleSearch}>Search</button>
           </div>
         </div>
       </div>
@@ -119,29 +139,44 @@ export const Ingredients = () => {
           return (
             <div className='flex w-1/3 gap-5' key={index}>
               <div
-                className='flex w-full items-center justify-center p-1 border rounded-lg h-9'
+                className='flex w-full items-center justify-center p-1 border rounded-lg h-8 gap-2'
               >
                 <input
-                  type='text'
-                  className='w-full h-full text-sm font-semibold p-2 mr-2'
-                  value={objKey}
-                  disabled={!edit}
-                  ref={ingredientRef}
-                />
-                <input
+                  id={`ingredient-input-${index}`}
                   type='text'
                   className='w-full h-full text-sm font-semibold p-2'
-                  value={ingredientList[objKey]}
-                  disabled={!edit}
-                  ref={quantityRef}
+                  onChange={(e) => setEditIngredient(e.target.value)}
+                  value={index === editIdx ? editIngredient : objKey}
+                  disabled={editIdx !== index}
+                  />
+                <input
+                  id={`quantity-input-${index}`}
+                  type='text'
+                  className='w-full h-full text-sm font-semibold p-2'
+                  onChange={(e) => setEditQuantity(e.target.value)}
+                  value={index === editIdx ? editQuantity : ingredientList[objKey]}
+                  disabled={editIdx !== index}
                 />
+                {editIdx !== null && (
+                  <select
+                  className='bg-white'
+                  value={editMeasurement}
+                  onChange={(e) => setEditMeasurement(e.target.value)}
+                >
+                  <option value='units'>Units</option>
+                  <option value='mL'>mL</option>
+                  <option value='L'>L</option>
+                  <option value='g'>g</option>
+                  <option value='kg'>kg</option>
+                  </select>
+                )}
               </div>
               <div className='flex gap-2'>
                 <DeleteButton handleDelete={() => handleDelete(objKey)}/>
-                {edit ? 
-                  <ConfirmButton handleEdit={handleEdit}/>
+                {editIdx === index ? 
+                  <ConfirmButton handleConfirmEdit={() => handleConfirmEdit(objKey)}/>
                   :
-                  <EditButton handleEdit={handleEdit} />
+                  <EditButton handleEdit={() => handleEdit(index, objKey, ingredientList[objKey])}/>
                 }
               </div>
             </div>

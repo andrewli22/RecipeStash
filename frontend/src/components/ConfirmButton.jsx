@@ -1,9 +1,10 @@
-export const ConfirmButton = ({ handleEdit }) => {
+export const ConfirmButton = ({ handleConfirmEdit }) => {
   return (
     <div className='flex justify-center items-center'>
       <button
         className='bg-green-400 hover:bg-green-500 h-full w-full p-2 rounded-md'
-        onClick={handleEdit}
+        onClick={handleConfirmEdit}
+        name='edit'
       >
         <svg
           xmlns='http://www.w3.org/2000/svg'
