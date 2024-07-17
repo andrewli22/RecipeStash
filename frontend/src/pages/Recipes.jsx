@@ -51,31 +51,32 @@ export const Recipes = () => {
         <BackButton />
       </div>
       {/* Search recipe */}
-      <div className='flex flex-col gap-5'>
+      <div className='flex flex-col gap-5 justify-center'>
         {/* Header */}
         <div>
           Search for Recipes
         </div>
-        <div>
+        <div className='flex justify-center items-center'>
           <input
-            type="text"
-            className='border border-black rounded w-1/3 p-2'
+            type='text'
+            className='border border-black rounded w-1/3 p-2 mx-5'
             onChange={(e) => setDish(e.target.value)}
             onKeyDown={(e) => handleEnter(e)}
+            placeholder='Enter dish'
           />
-        </div>
-        {/* Button to search */}
-        <div>
-          <button
-            className='border border-black rounded p-1'
-            onClick={() => handleSearch()}
-          >
-            Search
-          </button>
+          {/* Button to search */}
+          <div className='h-full'>
+            <button
+              className='border border-black rounded p-1 h-full'
+              onClick={() => handleSearch()}
+            >
+              Search
+            </button>
+          </div>
         </div>
       </div>
       {/* Load Recipes */}
-      <div className='mt-2 mx-20'>
+      <div className='mt-5 mx-20'>
         <div className='flex flex-wrap gap-10'>
           {results &&
             results.map((res, id) => {
