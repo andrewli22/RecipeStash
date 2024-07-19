@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router';
 import { KEY } from '../config';
 import DOMPurify from 'dompurify';
-import { BackButton } from '../components/BackButton';
 
 export const RecipePage = () => {
   const { recipeId, title } = useParams();
@@ -58,9 +57,6 @@ export const RecipePage = () => {
         <div className='w-1/3'></div>
         <div className='text-3xl flex-grow text-center'>
           {title}
-        </div>
-        <div className='w-1/3 flex justify-end'>
-          <BackButton />
         </div>
       </div>
       {info &&

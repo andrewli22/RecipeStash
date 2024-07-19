@@ -1,7 +1,7 @@
-import { BackButton } from "../components/BackButton"
 import { useState, useEffect, useMemo } from "react"
 import { KEY } from "../config.js";
 import { RecipeCard } from "../components/RecipeCard";
+import { Header } from "../components/Header.jsx";
 
 export const Recipes = () => {
   const URL = "https://api.spoonacular.com/recipes/complexSearch";
@@ -46,10 +46,7 @@ export const Recipes = () => {
   return(
     // Container
     <div className='h-full flex flex-col'>
-      {/* Back button */}
-      <div className='flex justify-end mx-5'>
-        <BackButton />
-      </div>
+      <Header />
       {/* Search recipe */}
       <div className='flex flex-col gap-5 justify-center'>
         {/* Header */}

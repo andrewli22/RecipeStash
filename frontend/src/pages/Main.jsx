@@ -1,16 +1,13 @@
 import { Link } from "react-router-dom"
+import { Header } from "../components/Header";
 
 export const Main = () => {
   localStorage.clear();
   return (
     <div className='h-full flex flex-col'>
-      <header className='flex p-5 mb-5'>
-        <Link to={'/'}>
-          <h1 className='text-3xl'>Recipe Heaven</h1>
-        </Link>
-      </header>
+      <Header />
       <div className='flex flex-col gap-2 h-full'>
-        <div>
+        <div className='flex justify-center'>
           <p>
             Search by:
           </p>
@@ -24,6 +21,9 @@ export const Main = () => {
           </Link>
         </div>
       </div>
+      <footer className='flex justify-end p-5'>
+        Made by Andrew Li
+      </footer>
     </div>
   )
 }

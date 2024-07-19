@@ -4,6 +4,7 @@ import { Main } from './pages/Main';
 import { Recipes } from './pages/Recipes';
 import { Ingredients } from './pages/Ingredients';
 import { RecipePage } from './pages/RecipePage';
+import { TrendingPage } from './pages/TrendingPage';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path='/recipe' element={<Recipes />}/>
         <Route path='/ingredients' element={<Ingredients />}/>
         <Route path='/recipe/:recipeId/:title' element={<RecipePage />}/>
+        <Route path='/trending' element={<TrendingPage />}/>
       </Routes>
     </BrowserRouter>
   )

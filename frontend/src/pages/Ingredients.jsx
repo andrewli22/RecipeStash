@@ -6,6 +6,7 @@ import { DeleteButton } from '../components/DeleteButton.jsx';
 import { PlusButton } from '../components/PlusButton.jsx';
 import { EditButton } from '../components/EditButton.jsx';
 import { ConfirmButton } from '../components/ConfirmButton.jsx';
+import { Header } from '../components/Header.jsx';
 
 export const Ingredients = () => {
   const URL = 'https://api.spoonacular.com/recipes/findByIngredients';
@@ -77,9 +78,7 @@ export const Ingredients = () => {
   return(
     <div className='h-full flex flex-col'>
       {/* Back button */}
-      <div className='flex justify-end mx-5'>
-        <BackButton />
-      </div>
+      <Header /> 
       {/* Search recipe */}
       <div className='flex flex-col gap-5'>
         {/* Header */}
