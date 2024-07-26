@@ -13,6 +13,7 @@ export const Ingredients = () => {
   const [results, setResults] = useState([]);
   const [ingredientList, setIngredientList] = useState({});
   const [ingredient, setIngredient] = useState('');
+  const [ingredientOrder, setIngredientOrder] = useState([]);
   const [measurement, setMeasurement] = useState('Units');
   const [quantity, setQuantity] = useState('');
   const [editIngredient, setEditIngredient] = useState('');
@@ -21,10 +22,13 @@ export const Ingredients = () => {
   const [editIdx, setEditIdx] = useState(null);
 
   const handleAddIngredient = () => {
-    const quant = quantity + ' ' + measurement;
-    setIngredientList({...ingredientList, [ingredient]: quant});
-    setIngredient('');
-    setQuantity('');
+    if (ingredient !== '' && quantity !== '') {
+      const quant = quantity + ' ' + measurement;
+      setIngredientList({...ingredientList, [ingredient]: quant});
+      setIngredientOrder([...ingredientOrder, ingredient]);
+      setIngredient('');
+      setQuantity('');
+    }
   }
 
   const fetchRecipes = async (userIngredients) => {
@@ -41,6 +45,7 @@ export const Ingredients = () => {
   }
 
   const handleEdit = (idx, oldKey, quantity) => {
+    console.log(oldKey);
     setEditIngredient(oldKey);
     const getNumeric = quantity.split(' ');
     setEditQuantity(getNumeric[0]);
@@ -49,18 +54,28 @@ export const Ingredients = () => {
 
   const handleConfirmEdit = (oldKey) => {
     if (editIdx !== null) {
-      const updatedIngredientList = { ...ingredientList };
-      delete updatedIngredientList[oldKey];
-      updatedIngredientList[editIngredient] = editQuantity + ' ' + editMeasurement;
-      setIngredientList(updatedIngredientList);
+      setIngredientList(prevList => {
+        const { [oldKey]: _, ...rest } = prevList;
+        return {
+          ...rest,
+          [editIngredient]: `${editQuantity} ${editMeasurement}`
+        };
+      });
+
+      setIngredientOrder(prevOrder => 
+        prevOrder.map(key => key === oldKey ? editIngredient : key)
+      );
     }
     setEditIdx(null);
     setEditIngredient('');
   }
 
   const handleDelete = (key) => {
-    delete ingredientList[key];
-    setIngredientList({ ...ingredientList });
+    setIngredientList(prevList => {
+      const { [key]: _, ...rest } = prevList;
+      return rest;
+    });
+    setIngredientOrder(prevOrder => prevOrder.filter(item => item !== key));
   }
 
   useEffect(() => {
@@ -97,7 +112,7 @@ export const Ingredients = () => {
                 onChange={(e) => setIngredient(e.target.value)}
                 value={ingredient}
                 placeholder='Enter Ingredients'
-                />
+              />
             </div>
             <div className='w-1/5'>
               <div className='flex mb-2'>
@@ -134,7 +149,7 @@ export const Ingredients = () => {
       </div>
       {/* Load Ingredients */}
       <div className='flex flex-col gap-2 items-center'>
-        {Object.keys(ingredientList).map((objKey, index) => {
+        {ingredientOrder.map((objKey, index) => {
           return (
             <div className='flex w-1/3 gap-5' key={index}>
               <div
@@ -147,7 +162,7 @@ export const Ingredients = () => {
                   onChange={(e) => setEditIngredient(e.target.value)}
                   value={index === editIdx ? editIngredient : objKey}
                   disabled={editIdx !== index}
-                  />
+                />
                 <input
                   id={`quantity-input-${index}`}
                   type='text'
@@ -156,7 +171,7 @@ export const Ingredients = () => {
                   value={index === editIdx ? editQuantity : ingredientList[objKey]}
                   disabled={editIdx !== index}
                 />
-                {editIdx !== null && (
+                {editIdx === index && (
                   <select
                   className='bg-white'
                   value={editMeasurement}
