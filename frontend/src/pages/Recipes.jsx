@@ -7,7 +7,7 @@ export const Recipes = () => {
   const URL = "https://api.spoonacular.com/recipes/complexSearch";
   const [dish, setDish] = useState("");
   const [results, setResults] = useState([]);
-
+  const [noResults, setNoResults] = useState(false);
   useEffect(() => {
     try {
       const getLastSearch = localStorage.getItem("lastSearch");
@@ -31,13 +31,18 @@ export const Recipes = () => {
 
   const fetchRecipes = async (dish) => {
     try {
+      console.log(dish);
       const response = await fetch(`${URL}?query=${dish}&apiKey=${KEY}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
+      if (!data.results.length) {
+        setNoResults(true);
+      }
       setResults([...data.results]);
       localStorage.setItem("lastSearch", JSON.stringify(data.results));
+      setDish("");
     } catch (error) {
       console.error(error);
     }
@@ -57,6 +62,7 @@ export const Recipes = () => {
           <input
             type='text'
             className='border border-black rounded w-1/3 p-2 mx-5'
+            value={dish}
             onChange={(e) => setDish(e.target.value)}
             onKeyDown={(e) => handleEnter(e)}
             placeholder='Enter dish'
@@ -74,13 +80,20 @@ export const Recipes = () => {
       </div>
       {/* Load Recipes */}
       <div className='mt-5 mx-20'>
-        <div className='flex flex-wrap gap-10'>
-          {results &&
-            results.map((res, id) => {
-              return (
-                <RecipeCard key={id} title={res.title} img={res.image} recipeId={res.id}/>
-              )
-            })}
+        <div className={`flex flex-wrap ${noResults ? 'justify-center' : ''} gap-10`}>
+          {results && noResults ?
+            (
+              <div>There were no results found...</div>
+            )
+            :
+            (
+              results.map((res, id) => {
+                return (
+                  <RecipeCard key={id} title={res.title} img={res.image} recipeId={res.id}/>
+                )
+              })
+            )
+          }
         </div>
       </div>
     </div>

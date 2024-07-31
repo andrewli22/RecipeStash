@@ -1,4 +1,3 @@
-import { BackButton } from '../components/BackButton'
 import { useState, useEffect } from 'react'
 import { KEY } from '../config.js';
 import { RecipeCard } from '../components/RecipeCard';
@@ -21,6 +20,9 @@ export const Ingredients = () => {
   const [editIdx, setEditIdx] = useState(null);
 
   const handleAddIngredient = () => {
+    if (quantity === '' && measurement === '') {
+      
+    }
     const quant = quantity + ' ' + measurement;
     setIngredientList({...ingredientList, [ingredient]: quant});
     setIngredient('');
