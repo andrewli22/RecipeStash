@@ -14,7 +14,6 @@ function App() {
         <Route path='/recipe' element={<Recipes />}/>
         <Route path='/ingredients' element={<Ingredients />}/>
         <Route path='/recipe/:recipeId/:title' element={<RecipePage />}/>
-        <Route path='/trending' element={<TrendingPage />}/>
       </Routes>
     </BrowserRouter>
   )

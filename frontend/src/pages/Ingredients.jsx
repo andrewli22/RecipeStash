@@ -91,7 +91,6 @@ export const Ingredients = () => {
 
   return(
     <div className='h-full flex flex-col'>
-      {/* Back button */}
       <Header /> 
       {/* Search recipe */}
       <div className='flex flex-col gap-5'>

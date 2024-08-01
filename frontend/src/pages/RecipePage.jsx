@@ -27,7 +27,6 @@ export const RecipePage = () => {
         original: item.original.replace(/^[–-]\s*/, '').trim(),
         image: item.image
       }));
-      console.log(getIngredients);
       const sanitiseInstructions = DOMPurify.sanitize(recipeInfo.instructions);
       const instructionArr = sanitiseInstructions
         .replaceAll(/(<([^>]+)>)/ig, '')
@@ -50,23 +49,67 @@ export const RecipePage = () => {
   }, [fetchRecipeInfo]);
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col mx-10'>
       {/* <div className='flex justify-end'>
       </div> */}
       <div className='flex justify-between items-center w-full'>
-        <div className='w-1/3'></div>
+        {/* <div className='w-1/3'></div> */}
         <div className='text-3xl flex-grow text-center'>
           {title}
         </div>
       </div>
       {info &&
         <div>
-          <div className='flex justify-center items-center'>
+          <div className='flex justify-center items-center my-5'>
             <img className='h-1/4 w-1/4 mr-5' src={info.image} alt={`${title} image`} />
             <div className='flex justify-center gap-3'>
-              <div>Health Score: {info.healthScore}</div>
-              <div>Cooking Time: {info.time} {info.time < 2 ? 'min' : 'mins'}</div>
-              <div>Serving Size: {info.servingSize}</div>
+              <div className='flex flex-col'>
+                <div>
+                  Health Score
+                </div>
+                <div>
+                  {info.healthScore}
+                </div>
+              </div>
+              <div className='flex flex-col'>
+                <div>
+                  Cooking Time
+                </div>
+                <div>
+                  {info.time} {info.time < 2 ? 'min' : 'mins'}
+                </div>
+              </div>
+              <div className='flex flex-col'>
+                <div>
+                  Serving Size
+                </div>
+                <div className='flex justify-evenly items-center'>
+                  <div className='flex items-center h-full'>
+                    <button
+                      title='Add New'
+                      className='group cursor-pointer outline-none h-full'
+                    >
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='30px'
+                        height='30px'
+                        viewBox='0 0 24 24'
+                        className='stroke-zinc-400 fill-none hover:fill-slate-300'
+                      >
+                        <path
+                          d='M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z'
+                          stroke-width='1.5'
+                        ></path>
+                        <path d='M8 12H16' stroke-width='1.5'></path>
+                        <path d='M12 16V8' stroke-width='1.5'></path>
+                      </svg>
+                    </button>
+                  </div>
+                  <div className='h-full text-2xl'>
+                    {info.servingSize}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div className='ml-5'>
