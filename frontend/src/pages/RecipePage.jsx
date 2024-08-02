@@ -67,7 +67,7 @@ export const RecipePage = () => {
                 <div>
                   Health Score
                 </div>
-                <div>
+                <div className='text-2xl'>
                   {info.healthScore}
                 </div>
               </div>
@@ -75,7 +75,7 @@ export const RecipePage = () => {
                 <div>
                   Cooking Time
                 </div>
-                <div>
+                <div className='text-2xl'>
                   {info.time} {info.time < 2 ? 'min' : 'mins'}
                 </div>
               </div>
@@ -83,39 +83,34 @@ export const RecipePage = () => {
                 <div>
                   Serving Size
                 </div>
-                <div className='flex justify-evenly items-center'>
-                  <div className='flex items-center h-full'>
+                <div className='flex justify-between items-center'>
+                  <div className='flex items-center h-full w-8'>
                     <button
                       title='Add New'
-                      className='group cursor-pointer outline-none h-full'
+                      className='group cursor-pointer outline-none h-full border-2 hover:bg-slate-300 rounded-full flex justify-center items center w-full'
                     >
-                      <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        width='30px'
-                        height='30px'
-                        viewBox='0 0 24 24'
-                        className='stroke-zinc-400 fill-none hover:fill-slate-300'
-                      >
-                        <path
-                          d='M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z'
-                          stroke-width='1.5'
-                        ></path>
-                        <path d='M8 12H16' stroke-width='1.5'></path>
-                        <path d='M12 16V8' stroke-width='1.5'></path>
-                      </svg>
+                      +
                     </button>
                   </div>
                   <div className='h-full text-2xl'>
                     {info.servingSize}
+                  </div>
+                  <div className='flex items-center h-full w-8'>
+                    <button
+                      title='Add New'
+                      className='group cursor-pointer outline-none h-full border-2 hover:bg-slate-300 rounded-full flex justify-center items center w-full'
+                    >
+                      -
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div className='ml-5'>
-            <div className='flex text-xl'>Ingredients:</div>
+            <div className='flex text-xl justify-center'>Ingredients</div>
             <div className='ml-5 w-1/2'>
-              <ul className='list-disc'>
+              <ul className='grid grid-cols-2'>
                 {ingredients.map((item, id) => {
                   return (
                     <li className='text-left mb-2' key={id}>
