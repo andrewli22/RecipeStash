@@ -1,140 +1,156 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router';
 import { KEY } from '../config';
+import { Header } from '../components/Header';
 import DOMPurify from 'dompurify';
 
 export const RecipePage = () => {
   const { recipeId, title } = useParams();
-  const [info, setInfo] = useState();
-  const [ingredients, setIngredients] = useState([]);
-  const [dietary, setDietary] = useState([]);
-  const [directions, setDirections] = useState();
-  const [numServing, setNumServing] = useState();
-
-  const fetchRecipeInfo = async () => {
+  const [recipeData, setRecipeData] = useState({
+    info: null,
+    ingredients: [],
+    dietary: [],
+    directions: [],
+  });
+  
+  const fetchRecipeInfo = useCallback(async () => {
     try {
       const response = await fetch(`https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${KEY}`);
       const recipeInfo = await response.json();
-      const { creditsText, healthScore, image, readyInMinutes, servings, extendedIngredients, instructions } = recipeInfo;
-      setInfo({
-        credits: creditsText,
-        healthScore: healthScore,
-        image: image,
-        time: readyInMinutes,
-        servingSize: servings
-      });
-
-      setIngredients(extendedIngredients.map(({ original, image }) => ({
-        original: original.replace(/^[–-]\s*/, '').trim(),
-        image: image
-      })));
-      
+      const { creditsText, healthScore, image, readyInMinutes, servings, extendedIngredients, instructions, diets } = recipeInfo;
+      console.log("here");
       const sanitiseInstructions = DOMPurify.sanitize(instructions);
       const instructionArr = sanitiseInstructions
         .replaceAll(/<[^>]+>/g, '')
         .split('.')
         .filter(instruction => instruction.trim() !== '' && !/^\d+$/.test(instruction.trim()))
         .map(instruction => instruction.trim());
-      
-      setDirections(instructionArr.slice(0, -1));
-      setDietary(recipeInfo.diets);
-      setNumServing(recipeInfo.servings);
+
+      setRecipeData({
+        info: {
+          credits: creditsText,
+          healthScore: healthScore,
+          image: image,
+          time: readyInMinutes,
+          servingSize: servings
+        },
+        ingredients: extendedIngredients.map(({ original }) => 
+          original.replace(/^[–-]\s*/, '').trim()
+        ),
+        dietary: diets,
+        directions: instructionArr.slice(0, -1),
+        numServing: servings
+      });
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [recipeId]);
 
   useEffect(() => {
     fetchRecipeInfo();
-  }, [fetchRecipeInfo]);
+  }, []);
 
   return (
-    <div className='flex flex-col mx-10'>
-      {/* <div className='flex justify-end'>
-      </div> */}
-      <div className='flex justify-between items-center w-full'>
-        {/* <div className='w-1/3'></div> */}
-        <div className='text-3xl flex-grow text-center'>
-          {title}
+    <div>
+      <Header />
+      <main className='flex flex-col items-center justify-center mx-60'>
+        <div className='flex justify-between items-center w-full'>
+          <div className='text-3xl flex-grow text-center'>
+            {title}
+          </div>
         </div>
-      </div>
-      {info &&
-        <div>
-          <div className='flex justify-center items-center my-5'>
-            <img className='h-1/4 w-1/4 mr-5' src={info.image} alt={`${title} image`} />
-            <div className='flex justify-center gap-3'>
-              <div className='flex flex-col'>
-                <div>
-                  Health Score
+        {recipeData.info && (
+          <section>
+            <div className='flex justify-between items-center my-5 mx-10'>
+              <img className='h-1/4 w-1/4 mr-5' src={recipeData.info.image} alt={`${title} image`} />
+              <div className='flex justify-center gap-3 mr-20'>
+                <div className='flex flex-col'>
+                  <div>
+                    Health Score
+                  </div>
+                  <div className='text-2xl'>
+                    {recipeData.info.healthScore}
+                  </div>
                 </div>
-                <div className='text-2xl'>
-                  {info.healthScore}
-                </div>
-              </div>
-              <div className='flex flex-col'>
-                <div>
-                  Cooking Time
-                </div>
-                <div className='text-2xl'>
-                  {info.time} {info.time < 2 ? 'min' : 'mins'}
+                <div className='flex flex-col'>
+                  <div>
+                    Cooking Time
+                  </div>
+                  <div className='text-2xl'>
+                    {recipeData.info.time} {recipeData.info.time < 2 ? 'min' : 'mins'}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className='ml-5'>
-            <div className='flex text-xl justify-center'>Ingredients</div>
-            <div className='flex flex-col justify-center'>
-              <div className='flex flex-col w-fit'>
-                <div>
-                  Serving Size
-                </div>
-                <div className='flex justify-between items-center'>
-                  <div className='flex items-center h-full w-8'>
-                    <button
-                      title='Add New'
-                      className='group cursor-pointer outline-none h-full border-2 hover:bg-slate-300 rounded-full flex justify-center items center w-full'
-                    >
-                      +
-                    </button>
+            <div className='flex flex-col items-center ml-5'>
+              <div className='flex text-xl justify-center'>Ingredients</div>
+              <div className='flex justify-center border rounded-md p-3 w-1/2 my-5'>
+                <div className='flex flex-col'>
+                  <div onClick={() => console.log(recipeData)}>
+                    Serving Size
                   </div>
-                  <div className='h-full text-2xl'>
-                    {info.servingSize}
-                  </div>
-                  <div className='flex items-center h-full w-8'>
-                    <button
-                      title='Add New'
-                      className='group cursor-pointer outline-none h-full border-2 hover:bg-slate-300 rounded-full flex justify-center items center w-full'
-                    >
-                      -
-                    </button>
+                  <div className='flex justify-between items-center'>
+                    <div className='flex items-center h-full w-8'>
+                      <button
+                        title='Increase Serving'
+                        onClick={() => setRecipeData(prevData => ({
+                          ...prevData,
+                          info: {
+                            ...prevData.info,
+                            servingSize: Math.max(1, prevData.info.servingSize - 1)
+                          }
+                        }))}
+                        className='group cursor-pointer outline-none h-full border-2 hover:bg-slate-300 rounded-full flex justify-center items center w-full'
+                      >
+                        -
+                      </button>
+                    </div>
+                    <div className='h-full text-2xl'>
+                      {recipeData.info.servingSize}
+                    </div>
+                    <div className='flex items-center h-full w-8'>
+                      <button
+                        title='Decrease Serving'
+                        onClick={() => setRecipeData(prevData => ({
+                          ...prevData,
+                          info: {
+                            ...prevData.info,
+                            servingSize: prevData.info.servingSize + 1
+                          }
+                        }))}
+                        className='group cursor-pointer outline-none h-full border-2 hover:bg-slate-300 rounded-full flex justify-center items center w-full'
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className='w-2/3'>
+              <div className='w-full ml-10'>
                 <ul className='grid grid-cols-2 list-disc'>
-                  {ingredients.map((item, id) => {
+                  {recipeData.ingredients.map((item, id) => {
                     return (
                       <li className='text-left mb-2' key={id}>
-                        {item.original}
+                        {item}
                       </li>
                     );
                   })}
                 </ul>
               </div>
             </div>
-            <div className=' flex text-xl'>Instructions</div>
-            <div className='ml-5 w-full'>
+            <div className='flex justify-center text-xl'>Instructions</div>
+            <div className='ml-10 w-full'>
               <ol className='list-decimal'>
-                {directions.map((instrct, id) => {
+                {recipeData.directions.map((instruction, id) => {
                   return (
-                    <li key={id} className='text-left mb-2'>{instrct}</li>
+                    <li key={id} className='text-left mb-2'>{instruction}</li>
                   )
                 })}
               </ol>
             </div>
-          </div>
-        </div>
-      }
+          </section>
+        )}
+      </main>
     </div>
-  )
+  );
 }
