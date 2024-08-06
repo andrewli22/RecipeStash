@@ -37,7 +37,7 @@ export const Main = () => {
           <div className='text-2xl mt-5'>
             Recipes
           </div>
-          <div className='flex flex-wrap gap-5 justify-center'>
+          <div className='flex flex-wrap gap-5'>
             {recipes &&
               recipes.map((curr, idx) => {
                 return (
