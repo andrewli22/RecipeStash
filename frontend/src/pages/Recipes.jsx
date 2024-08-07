@@ -2,12 +2,17 @@ import { useState, useEffect, useMemo } from "react"
 import { KEY } from "../config.js";
 import { RecipeCard } from "../components/RecipeCard";
 import { Header } from "../components/Header.jsx";
+import { Pagination } from "../components/Pagination.jsx";
 
 export const Recipes = () => {
   const URL = "https://api.spoonacular.com/recipes/complexSearch";
   const [dish, setDish] = useState("");
   const [results, setResults] = useState([]);
   const [noResults, setNoResults] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage, setPostsPerPage] = useState(10);
+
   useEffect(() => {
     try {
       const getLastSearch = localStorage.getItem("lastSearch");
@@ -46,6 +51,10 @@ export const Recipes = () => {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  const handlePagination = (pageNumber) => {
+    setCurrentPage(pageNumber);
   }
 
   return(

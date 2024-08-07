@@ -61,7 +61,7 @@ export const RecipePage = () => {
       let fetchedIngredients = extendedIngredients.map(({ original }) => 
         original.replace(/^[–-]\s*/, '').trim()
       );
-
+      console.log(fetchedIngredients);
       fetchedIngredients = handleIngredientQuantity(fetchedIngredients);
 
       const updatedIngredients = fetchedIngredients.map(item => ({
@@ -93,6 +93,9 @@ export const RecipePage = () => {
   }, [fetchRecipeInfo]);
 
   const handleCalculateQuantity = (item) => {
+    if (isNaN(item.quantity)) {
+      return item.quantity;
+    }
     let quant = Math.round(((item.quantity/recipeData.info.servingSize)*currServing)*10)/10;
     let prev = Math.round(((item.quantity/recipeData.info.servingSize)*(currServing+1))*10)/10;
     return quant > 0 ? quant : prev;
@@ -109,9 +112,9 @@ export const RecipePage = () => {
         </div>
         {recipeData.info && (
           <section>
-            <div className='flex justify-between items-center my-5 mx-10'>
+            <div className='flex justify-evenly items-center my-5 mx-10'>
               <img className='h-1/4 w-1/4 mr-5' src={recipeData.info.image} alt={`${title} image`} />
-              <div className='flex justify-center gap-3 mr-20'>
+              <div className='flex justify-evenly border rounded-md p-3 w-full max-w-md my-5 border-amber-500'>
                 <div className='flex flex-col'>
                   <div>
                     Health Score
@@ -128,11 +131,6 @@ export const RecipePage = () => {
                     {recipeData.info.time} {recipeData.info.time < 2 ? 'min' : 'mins'}
                   </div>
                 </div>
-              </div>
-            </div>
-            <section className='flex flex-col items-center ml-5'>
-              <div className='flex text-xl justify-center'>Ingredients</div>
-              <div className='flex justify-center border rounded-md p-3 w-1/2 my-5 border-amber-500'>
                 <div className='flex flex-col'>
                   <div onClick={() => console.log(ingredients)}>
                     Serving Size
@@ -162,29 +160,32 @@ export const RecipePage = () => {
                   </div>
                 </div>
               </div>
-              <div className='w-full ml-10'>
-                <ul className='grid grid-cols-2 list-disc'>
-                  {ingredients.map((item, id) => {
-                    return (
-                      <li className='text-left mb-2' key={id}>
-                        {handleCalculateQuantity(item)} {item.measurement} {item.ingredient}
-                      </li>
-                    );
-                  })}
-                </ul>
+            </div>
+            <section className='max-w-4l mx-auto px-5'>
+              <div className='flex flex-col items-center'>
+                <div className='text-xl mb-5'>Ingredients</div>
+                <div className='w-full'>
+                  <ul className='grid grid-cols-2 list-disc gap-x-28'>
+                    {ingredients.map((item, id) => {
+                      return (
+                        <li className='text-left mb-2 pl-2' key={id}>
+                          {handleCalculateQuantity(item)} {item.measurement} {item.ingredient}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
               </div>
             </section>
-            <section>
-              <div className='flex justify-center text-xl'>Instructions</div>
-              <div className='ml-10 w-full'>
-                <ol className='list-decimal'>
+            <section className='mt-8'>
+              <div className='text-xl mb-5 text-center'>Instructions</div>
+                <ol className='list-decimal pl-6'>
                   {recipeData.directions.map((instruction, id) => {
                     return (
-                      <li key={id} className='text-left mb-2 mr-10'>{instruction}</li>
+                      <li key={id} className='text-left mb-2 pl-2'>{instruction}</li>
                     )
                   })}
                 </ol>
-              </div>
             </section>
           </section>
         )}
