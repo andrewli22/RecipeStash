@@ -9,7 +9,7 @@ export const Main = () => {
 
   useEffect(() => {
     const getRecipes = async () => {
-      const res = await fetch(`https://api.spoonacular.com/recipes/random?number=10&apiKey=${KEY}`)
+      const res = await fetch(`https://api.spoonacular.com/recipes/random?number=14&apiKey=${KEY}`)
                     .then(res => res.json());
       setRecipes(res.recipes);
     }
@@ -19,7 +19,7 @@ export const Main = () => {
   return (
     <div className='h-full flex flex-col'>
       <Header />
-      <div className='flex flex-col gap-2 h-full'>
+      <section className='flex flex-col gap-2 h-full'>
         <div className='flex justify-center'>
           <p>
             Search by:
@@ -33,11 +33,11 @@ export const Main = () => {
             <button className='btn-primary'>Ingredients</button>
           </Link>
         </div>
-        <div className='flex flex-col'>
-          <div className='text-2xl mt-5'>
+        <div className='flex flex-col items-center w-full'>
+          <div className='text-2xl my-5'>
             Recipes
           </div>
-          <div className='flex flex-wrap gap-5'>
+          <div className='flex justify-center flex-wrap gap-5 mx-24'>
             {recipes &&
               recipes.map((curr, idx) => {
                 return (
@@ -47,7 +47,7 @@ export const Main = () => {
             }
           </div>
         </div>
-      </div>
+      </section>
     </div>
   )
 }

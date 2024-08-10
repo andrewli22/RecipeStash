@@ -93,10 +93,15 @@ export const Ingredients = () => {
     <div className='h-full flex flex-col'>
       <Header /> 
       {/* Search recipe */}
-      <div className='flex flex-col gap-5'>
+      <section>
+        Sidebar
+      </section>
+      <section className='flex flex-col gap-5'>
         {/* Header */}
         <div>
-          Search for Recipes
+          <p>
+            Add ingredients
+          </p>
         </div>
         <div className='flex flex-col justify-center items-center gap-3 mx-40 p-5 rounded'>
           <div className='flex w-2/3 justify-between'>
@@ -144,7 +149,7 @@ export const Ingredients = () => {
             <button className='h-full w-full border border-black rounded' onClick={handleSearch}>Search</button>
           </div>
         </div>
-      </div>
+      </section>
       {/* Load Ingredients */}
       <div className='flex flex-col gap-2 items-center'>
         {ingredientOrder.map((objKey, index) => {

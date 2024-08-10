@@ -11,7 +11,12 @@ export const Recipes = () => {
   const [noResults, setNoResults] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(10);
+  const [recordsPerPage] = useState(15);
+
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = results.slice(indexOfFirstRecord, indexOfLastRecord);
+  const nPages = Math.ceil(results.length / recordsPerPage);
 
   useEffect(() => {
     try {
@@ -37,7 +42,7 @@ export const Recipes = () => {
   const fetchRecipes = async (dish) => {
     try {
       console.log(dish);
-      const response = await fetch(`${URL}?query=${dish}&apiKey=${KEY}`);
+      const response = await fetch(`${URL}?query=${dish}&number=100&apiKey=${KEY}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -51,10 +56,6 @@ export const Recipes = () => {
     } catch (error) {
       console.error(error);
     }
-  }
-
-  const handlePagination = (pageNumber) => {
-    setCurrentPage(pageNumber);
   }
 
   return(
@@ -88,7 +89,7 @@ export const Recipes = () => {
         </div>
       </div>
       {/* Load Recipes */}
-      <div className='mt-5 mx-20'>
+      <div className='mt-5 mx-24'>
         <div className={`flex flex-wrap ${noResults ? 'justify-center' : ''} gap-10`}>
           {results && noResults ?
             (
@@ -96,7 +97,7 @@ export const Recipes = () => {
             )
             :
             (
-              results.map((res, id) => {
+              currentRecords.map((res, id) => {
                 return (
                   <RecipeCard key={id} title={res.title} img={res.image} recipeId={res.id}/>
                 )
@@ -104,6 +105,13 @@ export const Recipes = () => {
             )
           }
         </div>
+        {results.length > 0 ?
+          (
+            <Pagination currentPage={currentPage} nPages={nPages} setCurrentPage={setCurrentPage} />
+          ) : (
+            ''
+          )
+        }
       </div>
     </div>
   )
