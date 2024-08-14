@@ -1,11 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { KEY } from '../config.js';
 import { RecipeCard } from '../components/RecipeCard';
-import { DeleteButton } from '../components/DeleteButton.jsx';
 import { PlusButton } from '../components/PlusButton.jsx';
-import { EditButton } from '../components/EditButton.jsx';
-import { ConfirmButton } from '../components/ConfirmButton.jsx';
 import { Header } from '../components/Header.jsx';
+import { LoadIngredients } from '../utils/LoadIngredients.jsx';
 
 export const Ingredients = () => {
   const URL = 'https://api.spoonacular.com/recipes/findByIngredients';
@@ -15,10 +13,6 @@ export const Ingredients = () => {
   const [ingredientOrder, setIngredientOrder] = useState([]);
   const [measurement, setMeasurement] = useState('Units');
   const [quantity, setQuantity] = useState('');
-  const [editIngredient, setEditIngredient] = useState('');
-  const [editQuantity, setEditQuantity] = useState('');
-  const [editMeasurement, setEditMeasurement] = useState('Units');
-  const [editIdx, setEditIdx] = useState(null);
 
   const handleAddIngredient = () => {
     if (ingredient !== '' && quantity !== '') {
@@ -43,45 +37,6 @@ export const Ingredients = () => {
     }
   }
 
-  const handleEdit = (idx, oldKey, quantity) => {
-    console.log(oldKey);
-    setEditIngredient(oldKey);
-    const getNumeric = quantity.split(' ');
-    setEditQuantity(getNumeric[0]);
-    setEditIdx(idx);
-  }
-
-  const handleConfirmEdit = (oldKey) => {
-    if (editIdx !== null) {
-      setIngredientList(prevList => {
-        const { [oldKey]: _, ...rest } = prevList;
-        return {
-          ...rest,
-          [editIngredient]: `${editQuantity} ${editMeasurement}`
-        };
-      });
-
-      setIngredientOrder(prevOrder => 
-        prevOrder.map(key => key === oldKey ? editIngredient : key)
-      );
-    }
-    setEditIdx(null);
-    setEditIngredient('');
-  }
-
-  const handleDelete = (key) => {
-    setIngredientList(prevList => {
-      const { [key]: _, ...rest } = prevList;
-      return rest;
-    });
-    setIngredientOrder(prevOrder => prevOrder.filter(item => item !== key));
-  }
-
-  useEffect(() => {
-    if (editIdx !== null) {
-      document.getElementById(`ingredient-input-${editIdx}`).focus();
-    }
-  }, [editIdx]);
 
   const handleSearch = () => {
     const ingredients = Object.keys(ingredientList);
@@ -92,20 +47,14 @@ export const Ingredients = () => {
   return(
     <div className='h-full flex flex-col'>
       <Header /> 
-      {/* Search recipe */}
-      <section>
-        Sidebar
-      </section>
-      <section className='flex flex-col gap-5'>
-        {/* Header */}
-        <div>
-          <p>
-            Add ingredients
-          </p>
-        </div>
-        <div className='flex flex-col justify-center items-center gap-3 mx-40 p-5 rounded'>
-          <div className='flex w-2/3 justify-between'>
-            <div className='w-2/3'>
+      {/* Add Ingredients */}
+      <section className='flex w-2/6 h-screen bg-amber-100 rounded-md'>
+        <div className='flex flex-col w-full h-full p-4'>
+          <div className='text-center'>
+            Add Ingredients
+          </div>
+          <div className='flex justify-between gap-2'>  
+            <div className='w-3/5'>
               <div className='flex mb-2'>
                 <label>Ingredient:</label>
               </div>
@@ -129,7 +78,7 @@ export const Ingredients = () => {
                   value={quantity}
                 />
                 <select
-                  className='border-y border-r rounded-r bg-white p-2 h-10'
+                  className='border-y border-r rounded-r bg-white p-2 h-10 w-10'
                   value={measurement}
                   onChange={(e) => setMeasurement(e.target.value)}
                 >
@@ -145,61 +94,10 @@ export const Ingredients = () => {
               <PlusButton handleAddIngredient={handleAddIngredient} />
             </div>
           </div>
-          <div className='flex justify-center items-center h-full w-14'>
-            <button className='h-full w-full border border-black rounded' onClick={handleSearch}>Search</button>
-          </div>
+          <LoadIngredients ingredientOrder={ingredientOrder} ingredientList={ingredientList} setIngredientList={setIngredientList} setIngredientOrder={setIngredientOrder} />
         </div>
       </section>
-      {/* Load Ingredients */}
-      <div className='flex flex-col gap-2 items-center'>
-        {ingredientOrder.map((objKey, index) => {
-          return (
-            <div className='flex w-1/3 gap-5' key={index}>
-              <div
-                className='flex w-full items-center justify-center p-1 border rounded-lg h-8 gap-2'
-              >
-                <input
-                  id={`ingredient-input-${index}`}
-                  type='text'
-                  className='w-full h-full text-sm font-semibold p-2'
-                  onChange={(e) => setEditIngredient(e.target.value)}
-                  value={index === editIdx ? editIngredient : objKey}
-                  disabled={editIdx !== index}
-                />
-                <input
-                  id={`quantity-input-${index}`}
-                  type='text'
-                  className='w-full h-full text-sm font-semibold p-2'
-                  onChange={(e) => setEditQuantity(e.target.value)}
-                  value={index === editIdx ? editQuantity : ingredientList[objKey]}
-                  disabled={editIdx !== index}
-                />
-                {editIdx === index && (
-                  <select
-                  className='bg-white'
-                  value={editMeasurement}
-                  onChange={(e) => setEditMeasurement(e.target.value)}
-                >
-                  <option value='units'>Units</option>
-                  <option value='mL'>mL</option>
-                  <option value='L'>L</option>
-                  <option value='g'>g</option>
-                  <option value='kg'>kg</option>
-                  </select>
-                )}
-              </div>
-              <div className='flex gap-2'>
-                <DeleteButton handleDelete={() => handleDelete(objKey)}/>
-                {editIdx === index ? 
-                  <ConfirmButton handleConfirmEdit={() => handleConfirmEdit(objKey)}/>
-                  :
-                  <EditButton handleEdit={() => handleEdit(index, objKey, ingredientList[objKey])}/>
-                }
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      
       {/* Load Recipes */}
       <div className='mt-2 mx-20'>
         <div className='flex flex-wrap gap-10'>

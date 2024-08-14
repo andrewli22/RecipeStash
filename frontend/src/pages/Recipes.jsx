@@ -41,7 +41,6 @@ export const Recipes = () => {
 
   const fetchRecipes = async (dish) => {
     try {
-      console.log(dish);
       const response = await fetch(`${URL}?query=${dish}&number=100&apiKey=${KEY}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -49,6 +48,8 @@ export const Recipes = () => {
       const data = await response.json();
       if (!data.results.length) {
         setNoResults(true);
+      } else {
+        setNoResults(false);
       }
       setResults([...data.results]);
       localStorage.setItem("lastSearch", JSON.stringify(data.results));
@@ -89,8 +90,8 @@ export const Recipes = () => {
         </div>
       </div>
       {/* Load Recipes */}
-      <div className='mt-5 mx-24'>
-        <div className={`flex flex-wrap ${noResults ? 'justify-center' : ''} gap-10`}>
+      <div className='flex justify-center mt-5'>
+        <div className={`${noResults ? 'flex justify-center' : 'grid grid-cols-5'} gap-5`}>
           {results && noResults ?
             (
               <div>There were no results found...</div>
@@ -99,12 +100,16 @@ export const Recipes = () => {
             (
               currentRecords.map((res, id) => {
                 return (
-                  <RecipeCard key={id} title={res.title} img={res.image} recipeId={res.id}/>
+                  <div key={id} className='flex justify-center'>
+                    <RecipeCard title={res.title} img={res.image} recipeId={res.id}/>
+                  </div>
                 )
               })
             )
           }
         </div>
+      </div>
+      <div>
         {results.length > 0 ?
           (
             <Pagination currentPage={currentPage} nPages={nPages} setCurrentPage={setCurrentPage} />

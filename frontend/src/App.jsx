@@ -4,7 +4,6 @@ import { Main } from './pages/Main';
 import { Recipes } from './pages/Recipes';
 import { Ingredients } from './pages/Ingredients';
 import { RecipePage } from './pages/RecipePage';
-import { TrendingPage } from './pages/TrendingPage';
 
 function App() {
   return (
