@@ -3,20 +3,14 @@ import { KEY } from "../config.js";
 import { RecipeCard } from "../components/RecipeCard";
 import { Header } from "../components/Header.jsx";
 import { Pagination } from "../components/Pagination.jsx";
-
+import { PaginationFunction } from "../utils/PaginationFunction.jsx";
 export const Recipes = () => {
   const URL = "https://api.spoonacular.com/recipes/complexSearch";
   const [dish, setDish] = useState("");
   const [results, setResults] = useState([]);
   const [noResults, setNoResults] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [recordsPerPage] = useState(15);
-
-  const indexOfLastRecord = currentPage * recordsPerPage;
-  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = results.slice(indexOfFirstRecord, indexOfLastRecord);
-  const nPages = Math.ceil(results.length / recordsPerPage);
+  const { currentPage, setCurrentPage, paginatedData, nPages } = PaginationFunction(results);
 
   useEffect(() => {
     try {
