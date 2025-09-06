@@ -1,4 +1,5 @@
 # Recipe Stash
 
-This app allows users to search for recipes based on ingredients, dish name, or cuisine. You can use a recipe API, such as Spoonacular, to fetch the recipe data. Your app should display a list of recipes with images, titles, and short descriptions, and allow users to click on a recipe to view more details like ingredients and instructions.
+As someone who enjoys cooking and food, I built this passion project to help fellow foodies search for new recipes to try or transform their pantry ingredients into delicious meals.
 
+Note: If the app isn't fetching data, it means the web app has hit the API quota limit on the public API I'm using.
