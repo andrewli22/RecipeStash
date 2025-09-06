@@ -8,5 +8,6 @@ export default defineConfig({
     host: true,
     strictPort: true,
     port: 8080
-  }
+  },
+  base: process.env.VITE_BASE_PATH || '/RecipeStash'
 })
