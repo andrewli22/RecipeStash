@@ -92,7 +92,7 @@ export const Recipes = () => {
             )
             :
             (
-              currentRecords.map((res, id) => {
+              paginatedData.map((res, id) => {
                 return (
                   <div key={id} className='flex justify-center'>
                     <RecipeCard title={res.title} img={res.image} recipeId={res.id}/>

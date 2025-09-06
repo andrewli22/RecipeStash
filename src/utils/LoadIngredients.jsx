@@ -38,7 +38,7 @@ export const LoadIngredients = ({ ingredientOrder, setIngredientOrder }) => {
         return (
           <div className='flex w-full gap-5' key={index}>
             <div
-              className='flex w-full items-center justify-center p-1 rounded-lg h-8 gap-2 bg-yellow-200'
+              className='flex w-full items-center justify-center p-1 rounded-lg h-8 gap-2 bg-slate-300'
             >
               <input
                 id={`ingredient-input-${index}`}

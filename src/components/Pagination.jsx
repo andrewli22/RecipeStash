@@ -21,10 +21,10 @@ export const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
         {pageNumbers.map(pgNumber => (
           <li key={pgNumber} 
             className= {
-              `${currentPage == pgNumber ? 'bg-amber-400' : ''}
+              `${currentPage == pgNumber ? 'bg-green-500' : ''}
               border-solid
               w-6
-              hover:bg-amber-200
+              hover:bg-green-600
               rounded-lg
               p-1`
             }>
