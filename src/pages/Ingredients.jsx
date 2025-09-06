@@ -5,7 +5,7 @@ import { PlusButton } from '../components/PlusButton.jsx';
 import { Header } from '../components/Header.jsx';
 import { LoadIngredients } from '../utils/LoadIngredients.jsx';
 import { Pagination } from '../components/Pagination.jsx';
-import { PaginationFunction } from "../utils/PaginationFunction.jsx";
+import { PaginationFunction } from '../utils/PaginationFunction.jsx';
 
 export const Ingredients = () => {
   const URL = 'https://api.spoonacular.com/recipes/findByIngredients';

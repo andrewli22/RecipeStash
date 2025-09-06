@@ -1,12 +1,12 @@
-import { useState, useEffect, useMemo } from "react"
-import { KEY } from "../config.js";
-import { RecipeCard } from "../components/RecipeCard";
-import { Header } from "../components/Header.jsx";
-import { Pagination } from "../components/Pagination.jsx";
-import { PaginationFunction } from "../utils/PaginationFunction.jsx";
+import { useState, useEffect, useMemo } from 'react'
+import { KEY } from '../config.js';
+import { RecipeCard } from '../components/RecipeCard';
+import { Header } from '../components/Header.jsx';
+import { Pagination } from '../components/Pagination.jsx';
+import { PaginationFunction } from '../utils/PaginationFunction.jsx';
 export const Recipes = () => {
-  const URL = "https://api.spoonacular.com/recipes/complexSearch";
-  const [dish, setDish] = useState("");
+  const URL = 'https://api.spoonacular.com/recipes/complexSearch';
+  const [dish, setDish] = useState('');
   const [results, setResults] = useState([]);
   const [noResults, setNoResults] = useState(false);
 
@@ -14,7 +14,7 @@ export const Recipes = () => {
 
   useEffect(() => {
     try {
-      const getLastSearch = localStorage.getItem("lastSearch");
+      const getLastSearch = localStorage.getItem('lastSearch');
       const getLastSearchArr = JSON.parse(getLastSearch);
       setResults([...getLastSearchArr]);
     } catch (e) {
@@ -23,14 +23,14 @@ export const Recipes = () => {
   }, [])
 
   const handleEnter = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       handleSearch();
     }
   }
 
   const handleSearch = () => {
     fetchRecipes(dish);
-    setDish("");
+    setDish('');
   }
 
   const fetchRecipes = async (dish) => {
@@ -46,8 +46,8 @@ export const Recipes = () => {
         setNoResults(false);
       }
       setResults([...data.results]);
-      localStorage.setItem("lastSearch", JSON.stringify(data.results));
-      setDish("");
+      localStorage.setItem('lastSearch', JSON.stringify(data.results));
+      setDish('');
     } catch (error) {
       console.error(error);
     }

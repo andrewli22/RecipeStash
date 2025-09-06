@@ -1,16 +1,16 @@
-import { Link, useNavigate } from "react-router-dom";
-import { Header } from "../components/Header";
-import { useEffect, useState, useCallback, useMemo } from "react";
-import { KEY } from "../config";
-import { RecipeCard } from "../components/RecipeCard";
+import { Link, useNavigate } from 'react-router-dom';
+import { Header } from '../components/Header';
+import { useEffect, useState, useCallback, useMemo } from 'react';
+import { KEY } from '../config';
+import { RecipeCard } from '../components/RecipeCard';
 
 export const Main = () => {
   const navigate = useNavigate();
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState("recipes");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState('recipes');
 
   // Memoized API URL to avoid recreating on every render
   const apiUrl = useMemo(() =>
@@ -112,9 +112,9 @@ export const Main = () => {
               <div className='inline-flex bg-gray-100 rounded-lg p-1'>
                 <Link to={'/recipe'}>
                   <button
-                    onClick={() => setActiveTab("recipes")}
+                    onClick={() => setActiveTab('recipes')}
                     className={`flex items-center px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
-                      activeTab === "recipes"
+                      activeTab === 'recipes'
                         ? 'bg-green-600 text-white shadow-md'
                         : 'text-gray-600 hover:text-gray-800'
                     }`}
@@ -127,9 +127,9 @@ export const Main = () => {
                 </Link>
                 <Link to={'/ingredients'}>
                   <button
-                    onClick={() => setActiveTab("ingredients")}
+                    onClick={() => setActiveTab('ingredients')}
                     className={`flex items-center px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
-                      activeTab === "ingredients"
+                      activeTab === 'ingredients'
                         ? 'bg-green-600 text-white shadow-md'
                         : 'text-gray-600 hover:text-gray-800'
                     }`}

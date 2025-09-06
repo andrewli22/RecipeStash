@@ -1,15 +1,15 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
-import { KEY } from "../config.js";
-import { RecipeCard } from "../components/RecipeCard";
-import { Header } from "../components/Header.jsx";
-import { Pagination } from "../components/Pagination.jsx";
-import { PaginationFunction } from "../utils/PaginationFunction.jsx";
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { KEY } from '../config.js';
+import { RecipeCard } from '../components/RecipeCard';
+import { Header } from '../components/Header.jsx';
+import { Pagination } from '../components/Pagination.jsx';
+import { PaginationFunction } from '../utils/PaginationFunction.jsx';
 
 export const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -23,7 +23,9 @@ export const Search = () => {
   );
 
   const fetchRecipes = useCallback(async (query) => {
-    if (!query.trim()) return;
+    if (!query.trim()) {
+      return;
+    }
     
     try {
       setLoading(true);
@@ -51,7 +53,7 @@ export const Search = () => {
         setResults(data.results);
       }
       
-      localStorage.setItem("lastSearch", JSON.stringify(data.results || []));
+      localStorage.setItem('lastSearch', JSON.stringify(data.results || []));
       setCurrentPage(1); // Reset to first page for new search
     } catch (err) {
       if (err.name !== 'AbortError') {
@@ -73,14 +75,14 @@ export const Search = () => {
 
   // Load initial search results if query exists
   useEffect(() => {
-    const query = searchParams.get("q");
+    const query = searchParams.get('q');
     if (query) {
       setSearchQuery(query);
       fetchRecipes(query);
     } else {
       // Load last search from localStorage if no query
       try {
-        const lastSearch = localStorage.getItem("lastSearch");
+        const lastSearch = localStorage.getItem('lastSearch');
         if (lastSearch) {
           const lastSearchData = JSON.parse(lastSearch);
           setResults(lastSearchData || []);
@@ -142,9 +144,9 @@ export const Search = () => {
         {/* Results Section */}
         <section className='py-12 px-4'>
           <div className='max-w-7xl mx-auto'>
-            {searchParams.get("q") && (
+            {searchParams.get('q') && (
               <h2 className='text-3xl font-bold text-gray-800 mb-8'>
-                Results for "{searchParams.get("q")}"
+                Results for '{searchParams.get('q')}'
               </h2>
             )}
 
@@ -202,7 +204,7 @@ export const Search = () => {
               </>
             )}
 
-            {!loading && !error && !noResults && results.length === 0 && searchParams.get("q") && (
+            {!loading && !error && !noResults && results.length === 0 && searchParams.get('q') && (
               <div className='text-center py-20'>
                 <div className='w-24 h-24 mx-auto mb-6 bg-gray-200 rounded-full flex items-center justify-center'>
                   <svg className='w-12 h-12 text-gray-400' fill='currentColor' viewBox='0 0 20 20'>

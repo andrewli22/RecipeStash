@@ -40,7 +40,7 @@ export const RecipePage = () => {
   }
 
   const convertToDecimal = (fraction) => {
-    const parts = fraction.split("/");
+    const parts = fraction.split('/');
     if (parts.length === 2) {
       const numerator = parseFloat(parts[0].trim());
       const denominator = parseFloat(parts[1].trim());

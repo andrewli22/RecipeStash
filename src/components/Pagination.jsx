@@ -3,10 +3,14 @@ export const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
   const pageNumbers = [...Array(nPages + 1).keys()].slice(1)
 
   const goToNextPage = () => {
-    if(currentPage !== nPages) setCurrentPage(currentPage + 1)
+    if(currentPage !== nPages) {
+      setCurrentPage(currentPage + 1)
+    }
   }
   const goToPrevPage = () => {
-    if(currentPage !== 1) setCurrentPage(currentPage - 1)
+    if(currentPage !== 1) {
+      setCurrentPage(currentPage - 1)
+    }
   }
   return (
     <nav className='flex justify-center my-5'>
