@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from 'react'
-import { KEY } from '../config.js';
 import { RecipeCard } from '../components/RecipeCard';
 import { Header } from '../components/Header.jsx';
 import { Pagination } from '../components/Pagination.jsx';
@@ -35,7 +34,7 @@ export const Recipes = () => {
 
   const fetchRecipes = async (dish) => {
     try {
-      const response = await fetch(`${URL}?query=${dish}&number=100&apiKey=${KEY}`);
+      const response = await fetch(`${URL}?query=${dish}&number=100&apiKey=${import.meta.env.VITE_API_KEY}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }

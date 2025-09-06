@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
-import { KEY } from '../config.js';
 import { RecipeCard } from '../components/RecipeCard';
-import { PlusButton } from '../components/PlusButton.jsx';
 import { Header } from '../components/Header.jsx';
 import { LoadIngredients } from '../utils/LoadIngredients.jsx';
 import { Pagination } from '../components/Pagination.jsx';
@@ -63,7 +61,7 @@ export const Ingredients = () => {
       const timeoutId = setTimeout(() => controller.abort(), 10000);
       
       const response = await fetch(
-        `${URL}?apiKey=${KEY}&ingredients=${userIngredients}&number=100`,
+        `${URL}?apiKey=${import.meta.env.VITE_API_KEY}&ingredients=${userIngredients}&number=100`,
         { signal: controller.signal }
       );
       

@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { KEY } from '../config';
 import { Header } from '../components/Header';
 import DOMPurify from 'dompurify';
 
@@ -56,7 +55,7 @@ export const RecipePage = () => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-      const response = await fetch(`https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${KEY}`, {
+      const response = await fetch(`https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${import.meta.env.VITE_API_KEY}`, {
         signal: controller.signal
       });
       

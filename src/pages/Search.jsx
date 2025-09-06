@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { KEY } from '../config.js';
 import { RecipeCard } from '../components/RecipeCard';
 import { Header } from '../components/Header.jsx';
 import { Pagination } from '../components/Pagination.jsx';
@@ -18,7 +17,7 @@ export const Search = () => {
   const { currentPage, setCurrentPage, paginatedData, nPages } = PaginationFunction(results);
 
   const searchUrl = useMemo(() => 
-    `https://api.spoonacular.com/recipes/complexSearch?number=100&apiKey=${KEY}`,
+    `https://api.spoonacular.com/recipes/complexSearch?number=100&apiKey=${import.meta.env.VITE_API_KEY}`,
     []
   );
 

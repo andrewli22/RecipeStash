@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { useEffect, useState, useCallback, useMemo } from 'react';
-import { KEY } from '../config';
 import { RecipeCard } from '../components/RecipeCard';
 
 export const Main = () => {
@@ -14,8 +13,8 @@ export const Main = () => {
 
   // Memoized API URL to avoid recreating on every render
   const apiUrl = useMemo(() =>
-    `https://api.spoonacular.com/recipes/random?number=12&apiKey=${KEY}`,
-    [KEY]
+    `https://api.spoonacular.com/recipes/random?number=12&apiKey=${import.meta.env.VITE_API_KEY}`,
+    []
   );
 
   // Memoized fetch function to prevent unnecessary re-renders
