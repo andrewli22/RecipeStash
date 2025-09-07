@@ -3,6 +3,7 @@
 As someone who enjoys cooking and food, I built this passion project to help fellow foodies search for new recipes to try or transform their pantry ingredients into delicious meals.
 
 **Tech Stack**: JavaScript, React, TailwindCSS, Spoonacular API
+
 **Note**: This project uses the free tier of the Spoonacular API, which has usage limits. If you notice data isn't loading, the daily quota may have been reached.
  
 ### Search for Recipes
