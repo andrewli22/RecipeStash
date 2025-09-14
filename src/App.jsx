@@ -9,16 +9,18 @@ import { Analytics } from '@vercel/analytics/react';
 
 function App() {
   return (
-    <BrowserRouter>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Main />}/>
+          <Route path='/recipe' element={<Recipes />}/>
+          <Route path='/search' element={<Search />}/>
+          <Route path='/ingredients' element={<Ingredients />}/>
+          <Route path='/recipe/:recipeId/:title' element={<RecipePage />}/>
+        </Routes>
+      </BrowserRouter>
       <Analytics />
-      <Routes>
-        <Route path='/' element={<Main />}/>
-        <Route path='/recipe' element={<Recipes />}/>
-        <Route path='/search' element={<Search />}/>
-        <Route path='/ingredients' element={<Ingredients />}/>
-        <Route path='/recipe/:recipeId/:title' element={<RecipePage />}/>
-      </Routes>
-    </BrowserRouter>
+    </>
   )
 }
 
