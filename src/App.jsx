@@ -5,11 +5,13 @@ import { Recipes } from './pages/Recipes';
 import { Search } from './pages/Search';
 import { Ingredients } from './pages/Ingredients';
 import { RecipePage } from './pages/RecipePage';
+import { Analytics } from "@vercel/analytics/next"
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Analytics />
         <Route path='/' element={<Main />}/>
         <Route path='/recipe' element={<Recipes />}/>
         <Route path='/search' element={<Search />}/>

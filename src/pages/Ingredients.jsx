@@ -38,6 +38,7 @@ export const Ingredients = () => {
     }
   }, [ingredientOrder]);
 
+  // Add ingredients to list
   const handleAddIngredient = (e) => {
     e?.preventDefault();
     if (ingredient.trim() !== '') {

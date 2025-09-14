@@ -37,7 +37,7 @@ export const RecipePage = () => {
     }
     return ingredients;
   }
-
+  // Convert fraction to decimal
   const convertToDecimal = (fraction) => {
     const parts = fraction.split('/');
     if (parts.length === 2) {
@@ -67,6 +67,7 @@ export const RecipePage = () => {
       
       const recipeInfo = await response.json();
       const { creditsText, healthScore, image, readyInMinutes, servings, extendedIngredients, instructions, diets } = recipeInfo;
+      // Sanitise the fetched instructions for the recipe
       const sanitiseInstructions = DOMPurify.sanitize(instructions);
       const instructionArr = sanitiseInstructions
         .replaceAll(/<[^>]+>/g, '')
@@ -77,7 +78,7 @@ export const RecipePage = () => {
       let fetchedIngredients = extendedIngredients.map(({ original }) => 
         original.replace(/^[–-]\s*/, '').trim()
       );
-      console.log(fetchedIngredients);
+
       fetchedIngredients = handleIngredientQuantity(fetchedIngredients);
 
       const updatedIngredients = fetchedIngredients.map(item => ({
