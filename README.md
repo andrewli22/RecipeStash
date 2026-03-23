@@ -5,6 +5,8 @@ As someone who enjoys cooking and food, I built this passion project to help fel
 **Tech Stack**: JavaScript, React, TailwindCSS, Spoonacular API
 
 **Note**: This project uses the free tier of the Spoonacular API, which has usage limits. If you notice data isn't loading, the daily quota may have been reached.
+
+**Link**: https://recipe-stash-roan.vercel.app/
  
 ### Search for Recipes
 <img width="1000" height="500" alt="image" src="https://github.com/user-attachments/assets/27510623-95a9-4eeb-b60d-ec1b4adb0783" />
